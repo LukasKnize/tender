@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="cs">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <title>🔥 Tender 🔥</title>
+  <meta property="og:title" content="🔥 Tender 🔥" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="http://google.com" />
+  <meta property="og:image" content="http://my.site.com/screenshoter" />
+  <meta property="og:description"
+    content="Tender will help you to find your sexual orientation within couple minutes just by swiping like on Tinder" />
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+    body{
+      display: flex;
+      justify-content: center;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    main {
+      width: 400px;
+      height: 75vh;
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+    }
+
+    footer {
+      width: 400px;
+      display: flex;
+      justify-content: space-between;
+      height: calc(100vh - 75vh - 60px);
+      align-items: center;
+      background-color: #EBEBEB;
+    }
+
+    .swipeLeft {
+      animation: swipeL 0.4s;
+    }
+
+    .genContainer {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: #EBEBEB;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .genContainer h2 {
+      margin-bottom: 60px;
+      font-size: 2em;
+      color: #59C3C3;
+    }
+
+    .buttonContainer {
+      display: flex;
+      width: 100%;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+
+    .buttonContainer button {
+      width: 100px;
+      height: 50px;
+      color: #EBEBEB;
+      border: none;
+    }
+
+    .buttonContainer button:first-child {
+      background-color: #4062BB;
+    }
+
+    .buttonContainer button:nth-child(3) {
+      background-color: #F45B69;
+    }
+
+    .results {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      background-color: #EBEBEB;
+      text-align: center;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    header {
+      width: 400px;
+      height: 60px;
+      text-align: center;
+      background-color: #59C3C3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    h1 {
+      color: #F45B69;
+    }
+
+    @keyframes swipeL {
+      from {
+        transform: rotateZ(0deg), translateX(0);
+        opacity: 1;
+      }
+
+      to {
+        transform: rotateZ(-30deg) translateX(-300px);
+        opacity: 0;
+      }
+    }
+
+    .swipeRight {
+      animation: swipeR 0.4s;
+    }
+
+    @keyframes swipeR {
+      from {
+        transform: rotateZ(0deg) translateX(0);
+        opacity: 1;
+      }
+
+      to {
+        transform: rotateZ(30deg) translateX(300px);
+        opacity: 0;
+      }
+    }
+
+    @media (max-width: 400px) {
+      header {
+      width: 100%;
+      height: 60px;
+      text-align: center;
+      background-color: #59C3C3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    main{
+      width: 100%;
+    }
+
+    footer{
+      width: 100%;
+    }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="genContainer" id="genContainer">
+    <H2>Are you:</H2>
+    <div class="buttonContainer">
+      <button onclick="getUserGen('male')">male</button>
+      <p>or</p>
+      <button onclick="getUserGen('female')">female</button>
+    </div>
+    <p class="legalInfo">This website uses images from external sources that could colect personal info like IP adress
+      and store cookies, by clicking on buttons above and using this website, you accepting loading data from external source. <a href="./legalInfo.html">more info</a></p>
+  </div>
+  <div class="results">
+    <h2>You are:</h2>
+    <p>orientation: <span id="orient">lorem</span></p>
+    <p>age preferation: <span id="age">lorem</span></p>
+    <p>your taste: <span id="taste">lorem</span></p>
+    <h2 style="padding: 20px;">Take screenshot and share with your friends</h2>
+  </div>
+  <header>
+    <h1><i class="fas fa-fire-alt"></i>Tender<i class="fas fa-fire-alt"></i></h1>
+  </header>
+  <main>
+    <img src="" alt="" ontouchstart="tStart(event)" ontouchmove="tMove(event)" ontouchend="tEnd()" id="currentImg" data-cookiescript="accepted" data-cookiecategory="functionality">
+  </main>
+
+  <footer>
+    <p><i class="fas fa-chevron-left"></i> Pass</p>
+    <p>Smash <i class="fas fa-chevron-right"></i></p>
+  </footer>
+
+  <script>
+    let startX;
+    let startY;
+    let moveX;
+    let moveY;
+    let male = 0;
+    let female = 0;
+    let teen = 0;
+    let middle = 0;
+    let older = 0;
+    let degen = 0;
+    let normal = 0;
+    let counter = 0;
+
+    let currentIndex = 0;
+
+    let userGen; // true => male; false => female
+
+    let gen = [["degen", "teen", "boy"], ["degen", "teen", "boy"], ["normal", "teen", "boy"], ["normal", "teen", "boy"], ["normal", "teen", "boy"], ["normal", "middle", "girl"], ["normal", "middle", "girl"], ["normal", "middle", "girl"], ["normal", "teen", "girl"], ["normal", "teen", "girl"], ["normal", "teen", "girl"], ["normal", "teen", "girl"], ["normal", "middle", "girl"], ["normal", "teen", "girl"],
+   ["normal", "teen", "boy"], ["normal", "teen", "boy"], ["normal", "teen", "boy"], ["normal", "teen", "boy"], ["normal", "teen", "boy"], ["normal", "middle", "boy"], ["normal", "middle", "boy"], ["normal", "middle", "boy"], ["normal", "middle", "boy"], ["normal", "middle", "boy"], ["normal", "middle", "boy"], ["normal", "older", "girl"], ["normal", "older", "girl"], ["normal", "older", "girl"], ["normal", "older", "girl"],
+    ["normal", "older", "girl"], ["normal", "older", "girl"], ["normal", "older", "girl"], ["normal", "older", "boy"], ["normal", "older", "boy"], ["normal", "older", "boy"], ["normal", "older", "boy"], ["normal", "older", "boy"], ["normal", "older", "boy"], ["normal", "older", "boy"], ["normal", "older", "boy"], ["normal", "older", "boy"], ["degen", "teen", "boy"], ["degen", "teen", "boy"], ["degen", "teen", "boy"], ["degen", "teen", "boy"],
+    ["degen", "teen", "boy"], ["degen", "teen", "boy"], ["degen", "teen", "boy"], ["degen", "teen", "boy"], ["degen", "teen", "girl"], ["degen", "teen", "girl"], ["degen", "teen", "girl"], ["degen", "teen", "girl"], ["degen", "teen", "girl"], ["degen", "teen", "girl"], ["degen", "teen", "girl"], ["degen", "teen", "girl"]];
+
+    let links = ["https://static.wikia.nocookie.net/rezero/images/0/0f/Ferris_Character_Art.jpg/revision/latest?cb=20170507230740", "https://static.wikia.nocookie.net/blend-s/images/4/49/Infobox_Hideri.jpg/revision/latest?cb=20180214185937",
+      "https://pbs.twimg.com/media/FEC6HW-VUAATqWK?format=jpg&name=small", "https://pbs.twimg.com/media/FBrOxrxXMAA6kqy?format=jpg&name=medium", "https://pbs.twimg.com/media/EgNfB1eWsAY8tCn.jpg", "https://images.unsplash.com/photo-1624005340894-1b7da6903784?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzJ8fHBvcnRhaXR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
+       "https://images.unsplash.com/photo-1534614610-e8515f281a37?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NTJ8fHBvcnRhaXR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1624603225543-2ef7ffb11c8f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjJ8fHBvcnRhaXR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
+      "https://images.unsplash.com/photo-1618920126104-c3b718c4f168?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTUyfHxwb3J0YWl0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1618585183371-4fc30e7213e3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTQ0fHxwb3J0YWl0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60",
+    "https://images.unsplash.com/photo-1561047817-004e9d9143fb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTE1fHxwb3J0YWl0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1622925491166-999790e789b7?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTE2fHxwb3J0YWl0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60",
+  "https://images.unsplash.com/photo-1620991725705-9c663b7b5f3a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTEzfHxwb3J0YWl0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1624286709493-2d570c59ea31?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTZ8fHBvcnRhaXR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
+"https://images.unsplash.com/photo-1525665363629-cdf85a703b50?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTh8fHBvcnRhaXR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1613145997970-db84a7975fbb?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDZ8fHBvcnRhaXR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
+"https://images.unsplash.com/photo-1625826377861-5d71577a5f85?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzF8fHBvcnRhaXR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60","https://images.unsplash.com/photo-1616707808643-bfc4017690d4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OTh8fHBvcnRhaXR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
+"https://images.unsplash.com/photo-1618155530308-c37a780555e6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTIxfHxwb3J0YWl0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1623616145388-8f751c1faf4d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDV8fHBvcnRhaXR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
+"https://images.unsplash.com/photo-1618088044996-29f175e9d672?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDR8fHBvcnRhaXR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1631479501467-a46d06c900fc?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzB8fHBvcnRhaXR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60", 
+"https://images.unsplash.com/photo-1618215769558-0c0a54893cbd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mjh8fHBvcnRhaXR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1613382627941-be13d61c38ed?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjV8fHBvcnRhaXR8ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
+"https://images.unsplash.com/photo-1620274549078-11bf5291cb9a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTQ5fHxwb3J0YWl0fGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1592621385612-4d7129426394?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8b2xkZXIlMjB3b21hbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60",
+"https://images.unsplash.com/photo-1527565290982-018bcfdbee74?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzF8fG9sZGVyJTIwd29tYW58ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1592621385645-e41659e8aabe?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mzh8fG9sZGVyJTIwd29tYW58ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
+"https://images.unsplash.com/photo-1598971861663-1550191638a9?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDF8fG9sZGVyJTIwd29tYW58ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1573497019707-1c04de26e58c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NjR8fG9sZGVyJTIwd29tYW58ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
+"https://images.unsplash.com/photo-1502767882403-636aee14f873?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NzN8fG9sZGVyJTIwd29tYW58ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1605472489659-570db69c34d3?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTYyfHxvbGRlciUyMHdvbWFufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60",
+"https://images.unsplash.com/photo-1618077360395-f3068be8e001?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8b2xkZXIlMjBtYW58ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8N3x8b2xkZXIlMjBtYW58ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60",
+"https://images.unsplash.com/photo-1548372290-8d01b6c8e78c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8OHx8b2xkZXIlMjBtYW58ZW58MHx8MHx8&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1611178206041-54d5e075be45?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTR8fG9sZGVyJTIwbWFufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60",
+"https://images.unsplash.com/photo-1529586691389-2d3d4132856c?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDB8fG9sZGVyJTIwbWFufGVufDB8fDB8fA%3D%3D&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1519058082700-08a0b56da9b4?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjcwfHxvbGRlciUyMG1hbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60",
+"https://images.unsplash.com/photo-1588731247530-4076fc99173e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDIyfHxvbGRlciUyMG1hbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60", "https://images.unsplash.com/photo-1544266401-0c13025c8fd6?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDc5fHxvbGRlciUyMG1hbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60",
+"https://images.unsplash.com/photo-1543512672-70dc61e8516e?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8NDkyfHxvbGRlciUyMG1hbnxlbnwwfHwwfHw%3D&auto=format&fit=crop&w=600&q=60", "https://static.wikia.nocookie.net/jujutsu-kaisen/images/e/ef/Satoru_Gojo_%28Anime_2%29.png/revision/latest/scale-to-width-down/672?cb=20201025013634", "https://static.wikia.nocookie.net/jujutsu-kaisen/images/6/6f/Yuji_Itadori_%28Anime_2%29.png/revision/latest/scale-to-width-down/699?cb=20200908071838",
+"https://media.comicbook.com/2020/12/naruto-1249229.jpeg?auto=webp", "https://static.wikia.nocookie.net/maid-dragon/images/f/ff/Fafnir_profile.jpg/revision/latest/scale-to-width-down/600?cb=20170916081934", "https://static.wikia.nocookie.net/diabolik-lovers/images/7/70/Subaru_Sakamaki.png/revision/latest/scale-to-width-down/700?cb=20130903234649",
+"https://static.wikia.nocookie.net/rezero/images/7/72/Natsuki_Subaru_Anime.png/revision/latest/scale-to-width-down/700?cb=20160805000721", "https://static.wikia.nocookie.net/kimetsu-no-yaiba/images/e/e1/Tanjiro_anime.png/revision/latest/scale-to-width-down/699?cb=20181128204204", "https://static.wikia.nocookie.net/kimetsu-no-yaiba/images/e/e1/Tanjiro_anime.png/revision/latest/scale-to-width-down/699?cb=20181128204204",
+"https://cdn.myanimelist.net/images/characters/14/457312.jpg", "https://cdn.myanimelist.net/images/characters/5/354941.jpg", "https://cdn.myanimelist.net/images/characters/2/427132.jpg", "https://static.wikia.nocookie.net/please-dont-bully-me-nagatoro/images/a/ae/Nagatoro.jpg/revision/latest/scale-to-width-down/643?cb=20200322081952",
+"https://static.wikia.nocookie.net/konosuba/images/1/14/Aqua-anime.png/revision/latest/scale-to-width-down/484?cb=20180328145536", "https://static.wikia.nocookie.net/konosuba/images/d/d9/Darkness-anime.png/revision/latest/scale-to-width-down/476?cb=20180502130740", "https://static.wikia.nocookie.net/maid-dragon/images/5/52/Kobayashi_5.png/revision/latest/scale-to-width-down/500?cb=20170315190544",
+"https://static.wikia.nocookie.net/maid-dragon/images/6/67/Tohru_2.png/revision/latest/scale-to-width-down/600?cb=20170714020434"]
+
+    let usedIndex = [];
+    function start() {
+      serveImage();
+      document.getElementById('currentImg').src = links[currentIndex];
+    }
+
+    function getUserGen(userGender) {
+      if (userGender == "male") {
+        userGen = true;
+      } else {
+        userGen = false;
+      }
+      start();
+      document.getElementById("genContainer").style.display = "none";
+    }
+
+    function tStart(evt) {
+      startX = evt.touches[0].clientX;
+      startY = evt.touches[0].clientY;
+    }
+
+    function tMove(evt) {
+      moveX = evt.touches[0].clientX;
+      moveY = evt.touches[0].clientY;
+    }
+
+    function tEnd() {
+      if (startX + 100 < moveX) {
+        console.log('right')
+        document.getElementById('currentImg').classList.toggle('swipeRight');
+        for (let i = 0; i < gen[currentIndex].length; i++) {
+          if (gen[currentIndex][i] == "boy") {
+            male += 1;
+            console.log("ddd")
+          } else if (gen[currentIndex][i] == "girl") {
+            female += 1;
+          } else if (gen[currentIndex][i] == "teen") {
+            teen += 1;
+          } else if (gen[currentIndex][i] == "middle") {
+            middle += 1;
+          } else if (gen[currentIndex][i] == "older") {
+            older += 1;
+          } else if (gen[currentIndex][i] == "degen") {
+            degen += 1;
+          } else if (gen[currentIndex][i] == "normal") {
+            normal += 1;
+          }
+        }
+        setTimeout(() => {
+          document.getElementById('currentImg').classList.toggle('swipeRight');
+          serveImage();
+          document.getElementById('currentImg').src = links[currentIndex];
+        }, 400);
+      } else if (startX - 100 > moveX) {
+        console.log('left')
+        document.getElementById('currentImg').classList.toggle('swipeLeft');
+        setTimeout(() => {
+          document.getElementById('currentImg').classList.toggle('swipeLeft');
+          for (let i = 0; i < gen[currentIndex].length; i++) {
+            if (gen[currentIndex][i] == "boy") {
+              female += 0.2;
+            } else if (gen[currentIndex][i] == "girl") {
+              male += 0.2;
+            } else if (gen[currentIndex][i] == "teen") {
+              middle += 0.1;
+              older += 0.1;
+            } else if (gen[currentIndex][i] == "middle") {
+              teen += 0.1;
+              older += 0.1;
+            } else if (gen[currentIndex][i] == "older") {
+              teen += 0.1;
+              middle += 0.1;
+            } else if (gen[currentIndex][i] == "degen") {
+              normal += 0.1;
+            } else if (gen[currentIndex][i] == "normal") {
+              degen += 0.1;
+            }
+          }
+          serveImage();
+          document.getElementById('currentImg').src = links[currentIndex];
+        }, 400);
+      }
+    }
+
+
+    function serveImage() {
+      if (links.length == usedIndex.length || counter >= 30) {
+        console.log("male:" + male + " female:" + female + " teen:" + teen + " middle:" + middle + " older:" + older + " normal:" + normal + " degen:" + degen);
+        endScript()
+      } else {
+        let index = Math.floor(Math.random() * links.length);
+        let check = true;
+        while (check) {
+          if (usedIndex.includes(index)) {
+            index = Math.floor(Math.random() * links.length);
+          } else {
+            check = false;
+            counter += 1;
+          }
+        }
+        currentIndex = index;
+        usedIndex.push(index);
+      }
+    }
+
+    function endScript() {
+      let genRatio = Math.abs(male - female);
+      console.log(genRatio);
+      if (genRatio < 4) {
+        console.log("bi");
+      } else if (male > female && userGen) {
+        console.log("gay");
+      }else if (male > female && !userGen) {
+        console.log("straight");
+      }else if (male < female && userGen) {
+        console.log("straight");
+      }else if (male < female && !userGen) {
+        console.log("lesbien");
+      }
+    }
+
+    let allMetaElements = document.getElementsByTagName('meta');
+    //loop through and find the element you want
+    for (let i = 0; i < allMetaElements.length; i++) {
+      if (allMetaElements[i].getAttribute("property") == "og:description") {
+        //make necessary changes
+        allMetaElements[i].setAttribute('content', "description you want to include");
+        //no need to continue loop after making changes.
+        break;
+      }
+    } 
+  </script>
+</body>
+
+</html>
